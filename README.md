@@ -6,7 +6,7 @@ Accepts a customer support message via `POST /sort-ticket` and returns a structu
 
 ## Live URL
 
-> [https://revert-git-mock.vercel.app](https://revert-git-mock.vercel.app) *(update this after deployment)*
+> [https://revert-git-mock-omega.vercel.app/](https://revert-git-mock-omega.vercel.app/)
 
 ## Features
 
