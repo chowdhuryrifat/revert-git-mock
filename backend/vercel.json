@@ -1,11 +1,9 @@
 {
-  "builds": [
-    {
-      "src": "api/index.py",
-      "use": "@vercel/python"
+  "experimentalServices": {
+    "api": {
+      "routePrefix": "/",
+      "builder": "@vercel/python",
+      "entrypoint": "api/index.py"
     }
-  ],
-  "routes": [
-    { "src": "/(.*)", "dest": "api/index.py" }
-  ]
+  }
 }
