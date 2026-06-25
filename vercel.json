@@ -1,13 +1,11 @@
 {
-  "builds": [
-    {
-      "src": "api/index.py",
-      "use": "@vercel/python"
+  "experimentalServices": {
+    "frontend": {
+      "routePrefix": "/"
+    },
+    "backend": {
+      "root": "backend",
+      "routePrefix": "/_/backend"
     }
-  ],
-  "routes": [
-    { "src": "/health", "dest": "api/index.py" },
-    { "src": "/sort-ticket", "dest": "api/index.py" },
-    { "src": "/next-ticket-id", "dest": "api/index.py" }
-  ]
+  }
 }
