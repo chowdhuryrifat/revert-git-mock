@@ -1,8 +1,11 @@
+import os
 import asyncio
 import logging
+from pathlib import Path
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from .schemas import TicketRequest
 from .classifier import classify
 from .database import save_ticket_request, save_ticket_response, peek_next_ticket_id
@@ -58,3 +61,8 @@ async def sort_ticket(request: TicketRequest):
         )
 
     return result
+
+
+@app.get("/")
+async def index():
+    return FileResponse(Path(__file__).parent.parent / "static" / "index.html")
