@@ -21,27 +21,59 @@ def _get_client() -> Client | None:
     return _client
 
 
+_counter: int = 0
+
+
+def _db_max_ticket_id(client: Client) -> int | None:
+    try:
+        result = client.table("ticket_requests").select("ticket_id").order("id", desc=True).limit(1).execute()
+        if result.data:
+            return int(result.data[0]["ticket_id"].split("-")[1])
+    except Exception:
+        logging.warning("Failed to query max ticket_id")
+    return None
+
+
+def peek_next_ticket_id() -> str:
+    client = _get_client()
+    if client:
+        num = _db_max_ticket_id(client)
+        if num is not None:
+            return f"T-{num + 1:03d}"
+    return f"T-{_counter + 1:03d}"
+
+
+def _next_ticket_id(client: Client | None) -> str:
+    global _counter
+    if client:
+        num = _db_max_ticket_id(client)
+        if num is not None:
+            return f"T-{num + 1:03d}"
+    _counter += 1
+    return f"T-{_counter:03d}"
+
+
 def save_ticket_request(
-    ticket_id: str,
     channel: str | None,
     locale: str | None,
     message: str,
-) -> int | None:
+) -> tuple[int | None, str]:
     client = _get_client()
+    tid = _next_ticket_id(client)
     if not client:
-        return None
+        return None, tid
     try:
         result = client.table("ticket_requests").insert({
-            "ticket_id": ticket_id,
+            "ticket_id": tid,
             "channel": channel,
             "locale": locale,
             "message": message,
         }).execute()
         if result.data:
-            return result.data[0]["id"]
+            return result.data[0]["id"], tid
     except Exception:
         logging.exception("Failed to insert ticket request")
-    return None
+    return None, tid
 
 
 def save_ticket_response(

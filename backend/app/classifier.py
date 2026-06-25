@@ -1,5 +1,6 @@
 import re
 from .schemas import CaseType, Severity, Department
+from .llm_classifier import classify_with_llm
 
 
 KEYWORD_PATTERNS = {
@@ -133,6 +134,10 @@ def _safety_filter(summary: str) -> str:
 
 
 def classify(ticket_id: str, message: str) -> dict:
+    result = classify_with_llm(ticket_id, message)
+    if result is not None:
+        return result
+
     text = message.lower()
 
     best_case = CaseType.other

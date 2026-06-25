@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    { "src": "/health", "dest": "/api/index.py" },
+    { "src": "/sort-ticket", "dest": "/api/index.py" },
+    { "src": "/next-ticket-id", "dest": "/api/index.py" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
+}
